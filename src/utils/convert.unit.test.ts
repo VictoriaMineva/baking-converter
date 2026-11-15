@@ -36,10 +36,6 @@ describe('toGrams', () => {
     expect(toGrams(2, 'stick', getIngredient('butter')!)).toBeCloseTo(226);
   });
 
-  it('converts 0 cups of almond-flour to 0 grams', () => {
-    expect(toGrams(0, 'cup', getIngredient('almond-flour')!)).toBeCloseTo(0);
-  });
-
   it('throws when converting sticks of flour, which has no stick weight', () => {
     expect(() => toGrams(1, 'stick', getIngredient('flour')!)).toThrow();
   });

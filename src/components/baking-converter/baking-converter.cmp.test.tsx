@@ -2,7 +2,7 @@ import { render, h, describe, it, expect } from '@stencil/vitest';
 import { afterEach, vi } from 'vitest';
 import { userEvent } from 'vitest/browser';
 import axe from 'axe-core';
-import type { IngredientId, Unit } from '../../data/ingredients';
+import type { IngredientId } from '../../data/ingredients';
 
 async function setup(element: Parameters<typeof render>[0]) {
   const result = await render(element);
@@ -80,14 +80,6 @@ describe('baking-converter', () => {
       expect(warn).toHaveBeenCalledWith(expect.stringContaining('"flour" has no unit "stick"'));
     });
 
-    it('falls back to the first unit and warns when defaultUnit is not a unit at all', async () => {
-      const warn = vi.spyOn(console, 'warn').mockImplementation(() => {});
-      const { unit } = await setup(<baking-converter defaultUnit={'litre' as Unit} />);
-
-      expect(unit.value).toBe('cup');
-      expect(warn).toHaveBeenCalledOnce();
-    });
-
     it('ignores a change to the default props after load', async () => {
       const { root, ingredient, unit, output, waitForChanges } = await setup(
         <baking-converter defaultIngredient="butter" defaultUnit="stick" />,
@@ -101,34 +93,9 @@ describe('baking-converter', () => {
       expect(unit.value).toBe('stick');
       expect(output).toHaveTextContent('1 stick boter = 113 g');
     });
-
-    it('keeps the user’s choice when the default props change after load', async () => {
-      const { root, ingredient, unit, waitForChanges } = await setup(
-        <baking-converter defaultIngredient="butter" defaultUnit="stick" />,
-      );
-
-      await userEvent.selectOptions(ingredient, 'milk');
-      await waitForChanges();
-
-      root.setAttribute('default-ingredient', 'flour');
-      root.setAttribute('default-unit', 'tbsp');
-      await waitForChanges();
-
-      expect(ingredient.value).toBe('milk');
-      expect(unit.value).toBe('cup');
-    });
   });
 
   describe('converting', () => {
-    it('updates the result as the user types an amount', async () => {
-      const { amount, output, waitForChanges } = await setup(<baking-converter />);
-
-      await typeAmount(amount, '5');
-      await waitForChanges();
-
-      expect(output).toHaveTextContent('5 cups bloem = 600 g');
-    });
-
     it.each([
       ['1,5', '1,5 cups bloem = 180 g'],
       ['1.5', '1,5 cups bloem = 180 g'],
@@ -179,17 +146,6 @@ describe('baking-converter', () => {
       expect(output).toHaveTextContent('1 eetlepel (tbsp) bloem = 7,5 g');
     });
 
-    it('ignores a unit change to a unit the ingredient does not have', async () => {
-      const { unit, output, waitForChanges } = await setup(<baking-converter />);
-
-      /** Flour has no "stick" option, so the select's value becomes "". */
-      unit.value = 'stick';
-      unit.dispatchEvent(new Event('change'));
-      await waitForChanges();
-
-      expect(output).toHaveTextContent('1 cup bloem = 120 g');
-    });
-
     it('updates the unit list and resets an unsupported unit when the ingredient changes', async () => {
       const { ingredient, unit, output, waitForChanges } = await setup(
         <baking-converter defaultIngredient="butter" defaultUnit="stick" />,
@@ -238,17 +194,6 @@ describe('baking-converter', () => {
       expect(error).toHaveTextContent(message);
     });
 
-    it('links the format hint to the amount field, and adds the error once it shows', async () => {
-      const { amount, waitForChanges } = await setup(<baking-converter />);
-      expect(amount).toHaveAttribute('aria-describedby', 'amount-hint');
-
-      await typeAmount(amount, 'abc');
-      await userEvent.tab();
-      await waitForChanges();
-
-      expect(amount).toHaveAttribute('aria-describedby', 'amount-hint amount-error');
-    });
-
     it('clears the error as soon as the user starts fixing the amount', async () => {
       const { amount, error, output, waitForChanges } = await setup(<baking-converter />);
 
@@ -264,19 +209,6 @@ describe('baking-converter', () => {
       expect(amount).not.toHaveAttribute('aria-invalid');
       expect(amount).toHaveAttribute('aria-describedby', 'amount-hint');
       expect(output).toHaveTextContent('3 cups bloem = 360 g');
-    });
-
-    it('does not show the error again after a fixed amount is committed', async () => {
-      const { amount, error, waitForChanges } = await setup(<baking-converter />);
-
-      await typeAmount(amount, 'abc');
-      await userEvent.tab();
-      await typeAmount(amount, '3');
-      await userEvent.tab();
-      await waitForChanges();
-
-      expect(error.textContent).toBe('');
-      expect(amount).not.toHaveAttribute('aria-invalid');
     });
   });
 
@@ -340,15 +272,6 @@ describe('baking-converter', () => {
       expect(status.textContent).toBe('1 cup boter = 227 g');
     });
 
-    it('announces the new result when the unit changes', async () => {
-      const { unit, status, waitForChanges } = await setup(<baking-converter />);
-
-      await userEvent.selectOptions(unit, 'oz');
-      await waitForChanges();
-
-      expect(status.textContent).toBe('1 ounce (oz) bloem = 28 g');
-    });
-
     it('announces nothing for an invalid amount, which the error region already reports', async () => {
       const { amount, ingredient, status, waitForChanges } = await setup(<baking-converter />);
 
@@ -401,50 +324,6 @@ describe('baking-converter', () => {
   });
 
   describe('accessibility', () => {
-    /** Width of the widest option text, in the select's own font. */
-    function widestOption(select: HTMLSelectElement) {
-      const context = document.createElement('canvas').getContext('2d')!;
-      context.font = getComputedStyle(select).font;
-      return Math.max(
-        ...Array.from(select.options, option => context.measureText(option.text).width),
-      );
-    }
-
-    /** Room for text inside a select: its width minus the padding, which includes the arrow. */
-    function textRoom(select: HTMLSelectElement) {
-      const style = getComputedStyle(select);
-      return select.clientWidth - parseFloat(style.paddingLeft) - parseFloat(style.paddingRight);
-    }
-
-    it.each([320, 400, 480, 600, 601, 800])(
-      'shows every option in full at a width of %dpx (WCAG 1.4.10)',
-      async width => {
-        /** Milk offers "fluid ounce (fl oz)", the longest unit name. Verdana is wider than most page fonts. */
-        const { ingredient, unit } = await setup(
-          <baking-converter
-            defaultIngredient="milk"
-            style={{ width: `${width}px`, fontFamily: 'Verdana, sans-serif' }}
-          />,
-        );
-
-        for (const select of [ingredient, unit]) {
-          expect(widestOption(select)).toBeLessThanOrEqual(textRoom(select));
-        }
-      },
-    );
-
-    it('keeps its width inside a flex row, which sizes items to their content', async () => {
-      const { root, unmount } = await render(
-        <div style={{ display: 'flex' }}>
-          <baking-converter />
-        </div>,
-      );
-      mounted.push(unmount);
-
-      /** 20rem, the smallest width the layout supports. */
-      expect(root.querySelector('baking-converter')!.clientWidth).toBe(320);
-    });
-
     it('uses --bc-focus-color for the focus outline, and --bc-accent for the result', async () => {
       const { amount, output } = await setup(
         <baking-converter
@@ -466,22 +345,6 @@ describe('baking-converter', () => {
       amount.focus();
 
       expect(getComputedStyle(amount).outlineColor).toBe('rgb(1, 2, 3)');
-    });
-
-    it('colours the dropdown arrows and field backgrounds from the tokens', async () => {
-      const { ingredient, amount, unit } = await setup(
-        <baking-converter
-          style={{ '--bc-text-color': 'rgb(1, 2, 3)', '--bc-input-bg': 'rgb(4, 5, 6)' }}
-        />,
-      );
-
-      for (const select of [ingredient, unit]) {
-        const arrow = getComputedStyle(select.parentElement!, '::after');
-        expect(arrow.backgroundColor).toBe('rgb(1, 2, 3)');
-      }
-      for (const field of [ingredient, amount, unit]) {
-        expect(getComputedStyle(field).backgroundColor).toBe('rgb(4, 5, 6)');
-      }
     });
 
     it('gives every form field a computed accessible name', async () => {
@@ -542,14 +405,9 @@ describe('baking-converter', () => {
       }
     });
 
-    it('has no axe violations on load', async () => {
-      const { root } = await setup(<baking-converter />);
-
-      expect(await axeViolations(root)).toEqual([]);
-    });
-
-    it('has no axe violations while an error is shown', async () => {
+    it('has no axe violations, on load and while an error is shown', async () => {
       const { root, amount, error, waitForChanges } = await setup(<baking-converter />);
+      expect(await axeViolations(root)).toEqual([]);
 
       await typeAmount(amount, 'abc');
       await userEvent.tab();

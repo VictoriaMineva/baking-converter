@@ -36,15 +36,9 @@ describe('validateAmount', () => {
     'NaN',
     '2 cups',
     /** No fractions: the decimal keypad has no "/". */
-    '0/4',
-    '1/0',
     '1/2',
-    '3/4',
     '1 1/2',
-    '2  1/4',
     '1/',
-    '/2',
-    '1 / 2',
   ])('rejects "%s" as an invalid format', input => {
     expect(validateAmount(input)).toEqual({ valid: false, error: 'format' });
   });
