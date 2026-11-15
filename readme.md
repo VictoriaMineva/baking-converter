@@ -1,111 +1,120 @@
-[![Built With Stencil](https://img.shields.io/badge/-Built%20With%20Stencil-16161d.svg?logo=data%3Aimage%2Fsvg%2Bxml%3Bbase64%2CPD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4KPCEtLSBHZW5lcmF0b3I6IEFkb2JlIElsbHVzdHJhdG9yIDE5LjIuMSwgU1ZHIEV4cG9ydCBQbHVnLUluIC4gU1ZHIFZlcnNpb246IDYuMDAgQnVpbGQgMCkgIC0tPgo8c3ZnIHZlcnNpb249IjEuMSIgaWQ9IkxheWVyXzEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgeG1sbnM6eGxpbms9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkveGxpbmsiIHg9IjBweCIgeT0iMHB4IgoJIHZpZXdCb3g9IjAgMCA1MTIgNTEyIiBzdHlsZT0iZW5hYmxlLWJhY2tncm91bmQ6bmV3IDAgMCA1MTIgNTEyOyIgeG1sOnNwYWNlPSJwcmVzZXJ2ZSI%2BCjxzdHlsZSB0eXBlPSJ0ZXh0L2NzcyI%2BCgkuc3Qwe2ZpbGw6I0ZGRkZGRjt9Cjwvc3R5bGU%2BCjxwYXRoIGNsYXNzPSJzdDAiIGQ9Ik00MjQuNywzNzMuOWMwLDM3LjYtNTUuMSw2OC42LTkyLjcsNjguNkgxODAuNGMtMzcuOSwwLTkyLjctMzAuNy05Mi43LTY4LjZ2LTMuNmgzMzYuOVYzNzMuOXoiLz4KPHBhdGggY2xhc3M9InN0MCIgZD0iTTQyNC43LDI5Mi4xSDE4MC40Yy0zNy42LDAtOTIuNy0zMS05Mi43LTY4LjZ2LTMuNkgzMzJjMzcuNiwwLDkyLjcsMzEsOTIuNyw2OC42VjI5Mi4xeiIvPgo8cGF0aCBjbGFzcz0ic3QwIiBkPSJNNDI0LjcsMTQxLjdIODcuN3YtMy42YzAtMzcuNiw1NC44LTY4LjYsOTIuNy02OC42SDMzMmMzNy45LDAsOTIuNywzMC43LDkyLjcsNjguNlYxNDEuN3oiLz4KPC9zdmc%2BCg%3D%3D&colorA=16161d&style=flat-square)](https://stenciljs.com)
+# Bakcalculator: `<baking-converter>`
 
-# Stencil Component Starter
+Een webcomponent, gebouwd met [Stencil](https://stenciljs.com), die de maten uit Amerikaanse bakrecepten omrekent naar grammen.
 
-> This is a starter project for building a standalone Web Components using Stencil.
+Amerikaanse recepten meten de meeste ingrediënten in volume: cups, eetlepels, theelepels en sticks boter. In een Nederlandse keuken gebruik je een weegschaal. Een cup bloem weegt veel minder dan een cup boter, dus met één vaste factor kom je er niet. De component kent per ingrediënt het gewicht van een cup en laat het resultaat in grammen zien, bijvoorbeeld **1,5 cups bloem = 180 g**.
 
-Stencil is a compiler for building fast web apps using Web Components.
+Ik bak zelf taarten, macarons en cupcakes uit Amerikaanse recepten. Juist daar luistert het gewicht nauw, en daar komt het idee vandaan.
 
-Stencil combines the best concepts of the most popular frontend frameworks into a compile-time rather than runtime tool. Stencil takes TypeScript, JSX, a tiny virtual DOM layer, efficient one-way data binding, an asynchronous rendering pipeline (similar to React Fiber), and lazy-loading out of the box, and generates 100% standards-based Web Components that run in any browser supporting the Custom Elements specification.
+## Aan de slag
 
-Stencil components are just Web Components, so they work in any major framework or with no framework at all.
-
-## Getting Started
-
-To start building a new web component using Stencil, clone this repo to a new directory:
-
-```bash
-git clone https://github.com/stenciljs/component-starter.git my-component
-cd my-component
-git remote rm origin
-```
-
-and run:
+Je hebt Node.js 20 of hoger nodig.
 
 ```bash
 npm install
-npm start
+npm start        # ontwikkelserver met live reload op http://localhost:3333
+npm test         # bouwt de component en draait de unit- en componenttests
+npm run build    # productiebuild naar dist/, loader/ en www/
 ```
 
-To build the component for production, run:
+Bij de eerste `npm test` kan Playwright vragen om de browser te installeren: `npx playwright install chromium`.
 
-```bash
-npm run build
-```
+## Gebruik
 
-To run the unit tests for the components, run:
-
-```bash
-npm test
-```
-
-Need help? Check out our docs [here](https://stenciljs.com/docs/my-first-component).
-
-## Naming Components
-
-When creating new component tags, we recommend _not_ using `stencil` in the component name (ex: `<stencil-datepicker>`). This is because the generated component has little to nothing to do with Stencil; it's just a web component!
-
-Instead, use a prefix that fits your company or any name for a group of related components. For example, all of the [Ionic-generated](https://ionicframework.com/) web components use the prefix `ion`.
-
-## Using this component
-
-There are two strategies we recommend for using web components built with Stencil.
-
-The first step for all two of these strategies is to [publish to NPM](https://docs.npmjs.com/getting-started/publishing-npm-packages).
-
-You can read more about these different approaches in the [Stencil docs](https://stenciljs.com/docs/publishing).
-
-### Lazy Loading
-
-If your Stencil project is built with the [`dist`](https://stenciljs.com/docs/distribution) output target, you can import a small bootstrap script that registers all components and allows you to load individual component scripts lazily.
-
-For example, given your Stencil project namespace is called `my-design-system`, to use `my-component` on any website, inject this into your HTML:
+Laad de component en zet de tag op de pagina:
 
 ```html
-<script type="module" src="https://unpkg.com/my-design-system"></script>
-<!--
-To avoid unpkg.com redirects to the actual file, you can also directly import:
-https://unpkg.com/foobar-design-system@0.0.1/dist/foobar-design-system/foobar-design-system.esm.js
--->
-<my-component first="Stencil" middle="'Don't call me a framework'" last="JS"></my-component>
+<script type="module" src="/build/baking-converter.esm.js"></script>
+
+<baking-converter default-ingredient="butter" default-unit="stick"></baking-converter>
 ```
 
-This will only load the necessary scripts needed to render `<my-component />`. Once more components of this package are used, they will automatically be loaded lazily.
+In een app met een bundler registreer je de component via de loader:
 
-You can also import the script as part of your `node_modules` in your applications entry file:
+```ts
+import { defineCustomElements } from 'baking-converter/loader';
 
-```tsx
-import 'foobar-design-system/dist/foobar-design-system/foobar-design-system.esm.js';
+defineCustomElements();
 ```
 
-Check out this [Live Demo](https://stackblitz.com/edit/vitejs-vite-y6v26a?file=src%2Fmain.tsx).
+### Properties
 
-### Standalone
+| Attribuut            | Property            | Standaard | Beschrijving                                                                                                    |
+| -------------------- | ------------------- | --------- | --------------------------------------------------------------------------------------------------------------- |
+| `default-ingredient` | `defaultIngredient` | `"flour"` | Het ingrediënt dat bij het laden geselecteerd is, bijvoorbeeld `"butter"`.                                      |
+| `default-unit`       | `defaultUnit`       | `"cup"`   | De eenheid die bij het laden geselecteerd is, bijvoorbeeld `"stick"`. Moet bestaan voor het gekozen ingrediënt. |
 
-If you are using a Stencil component library with `dist-custom-elements`, we recommend importing Stencil components individually in those files where they are needed.
+Bij een onbekende waarde valt de component terug op het eerste ingrediënt of de eerste eenheid van dat ingrediënt, en schrijft een `console.warn`.
 
-To export Stencil components as standalone components make sure you have the [`dist-custom-elements`](https://stenciljs.com/docs/custom-elements) output target defined in your `stencil.config.ts`.
+### Styling
 
-For example, given you'd like to use `<my-component />` as part of a React component, you can import the component directly via:
+De component gebruikt Shadow DOM. Je past de kleuren aan met CSS custom properties op het element:
 
-```tsx
-import 'foobar-design-system/my-component';
-
-function App() {
-  return (
-    <>
-      <div>
-        <my-component
-          first="Stencil"
-          middle="'Don't call me a framework'"
-          last="JS"
-        ></my-component>
-      </div>
-    </>
-  );
+```css
+baking-converter {
+  --bc-accent: #7c2d12;
+  --bc-result-bg: #fff7ed;
 }
-
-export default App;
 ```
 
-Check out this [Live Demo](https://stackblitz.com/edit/vitejs-vite-b6zuds?file=src%2FApp.tsx).
+Het lettertype neemt de component over van de pagina. Alle custom properties en hun standaardwaarden staan in de [componentreadme](src/components/baking-converter/readme.md), die Stencil uit de broncode genereert.
+
+## Ontwerpkeuzes
+
+### Een tekstveld voor de hoeveelheid, zonder breuken
+
+Nederlanders typen een decimale komma (`1,5`). Een `type="number"`-veld gaat daar per browser en taal anders mee om, en geeft bij invoer die het niet begrijpt een lege waarde terug. Dan kan de component "leeg" en "ongeldig" niet meer uit elkaar houden. Daarom is het veld `type="text"` met `inputmode="decimal"`: op een telefoon krijg je nog steeds een numeriek toetsenbord. Zowel `1,5` als `1.5` werkt. De komma heb ik getest in Chrome en Firefox.
+
+Amerikaanse recepten schrijven vaak breuken, zoals `1/2` of `1 1/2`. Ik verwacht dat je de component vooral op je telefoon gebruikt, naast het recept, en het numerieke toetsenbord heeft geen `/`. Breuken ondersteunen zou betekenen dat iedereen het volledige toetsenbord krijgt, ook voor gewone getallen. Je typt `1/2` dus als `0,5`. Een hint onder het veld zegt dat meteen, en bij andere invoer krijg je een foutmelding met een voorbeeld.
+
+### Gewichten en eenheden
+
+Alle gewichten komen uit één bron, de [ingredient weight chart van King Arthur Baking](https://www.kingarthurbaking.com/learn/ingredient-weight-chart), zodat ze onderling kloppen. Het zijn gemiddelden: wat een cup echt weegt, hangt af van hoe je schept of aandrukt. Bruine suiker staat erin als aangedrukt, zoals Amerikaanse recepten bedoelen.
+
+Een ounce (`oz`) is een gewicht en altijd 28,35 g. Een fluid ounce (`fl oz`) is een volume, dat ik via het gewicht per cup omreken (1 cup = 8 fl oz). Vloeistoffen zoals melk en slagroom bieden `fl oz` aan, droge ingrediënten `oz`. Elk ingrediënt toont alleen de eenheden die erbij passen, dus "een stick bloem" kun je niet kiezen.
+
+### Rustige validatie
+
+Het resultaat verandert terwijl je typt. Een foutmelding komt pas als je het veld verlaat of op Enter drukt, en verdwijnt zodra je weer typt. Typ je een half getal zoals `1,`, dan blijft het laatste geldige resultaat staan, zodat het niet knippert.
+
+Nul geldt als fout. "0 cups" omrekenen is nooit wat iemand bedoelt, dus de component behandelt het als typefout in plaats van "0 g" te tonen.
+
+### Startwaarden, en nog geen event
+
+`default-ingredient` en `default-unit` bepalen alleen de selectie bij het laden. Latere wijzigingen negeert de component bewust: anders kan de pagina overschrijven wat de gebruiker net heeft gekozen. Ik heb overwogen om ze twee kanten op gelijk te houden (`mutable` en `reflect`), maar dan zijn de pagina en de gebruiker allebei eigenaar van de selectie.
+
+Er is nog geen event met het resultaat. De component is een zelfstandig hulpmiddel: je leest het resultaat af en gebruikt het. Zolang geen pagina de waarde nodig heeft, weet ik niet hoe zo'n event eruit moet zien, en elk event is API die je daarna stabiel moet houden.
+
+## Toegankelijkheid
+
+Wat erin zit:
+
+- Elk veld heeft een zichtbaar label.
+- Onder het hoeveelheidsveld staat een hint met het verwachte formaat ("Bijvoorbeeld 1,5. Typ ½ als 0,5."), gekoppeld aan het veld, zodat een screenreader die bij het label voorleest (WCAG 3.3.2).
+- Bij ongeldige invoer krijgt het veld `aria-invalid="true"` en wordt de foutmelding aan het veld gekoppeld. Een fout zie je altijd als tekst, niet alleen aan de kleur (WCAG 1.4.1).
+- Het resultaat wordt voorgelezen als je klaar bent met een wijziging (veld verlaten, Enter, of een andere keuze in een dropdown), niet bij elke toetsaanslag (WCAG 4.1.3).
+- De hele component heeft `lang="nl"`, zodat een screenreader ook op een anderstalige pagina een Nederlandse stem gebruikt (WCAG 3.1.2).
+- Focus is op elk veld zichtbaar, en tekst heeft een contrast van minstens 4,5:1.
+- Enter herlaadt de pagina niet.
+
+Zo heb ik het getest:
+
+- Alleen met het toetsenbord: Tab door de velden, pijltjestoetsen in de dropdowns.
+- Op 200% zoom en op een smal telefoonscherm.
+- Met de screenreader NVDA op Windows: labels, hint, foutmeldingen en resultaten worden voorgelezen.
+- In Chrome en Firefox.
+- Automatisch: de componenttests draaien axe-core, en controleren onder meer de toegankelijke namen, beschrijvingen en de toetsenbordvolgorde.
+
+## Bekende beperking
+
+Een punt en een komma tellen allebei als decimaalteken. Typ je `1.000` met een punt als duizendtalscheiding, dan leest de component dat als 1 en niet als 1000. Bij cups en eetlepels kom je zulke getallen zelden tegen.
+
+## Met meer tijd
+
+- **Een `conversionChange`-event**, zodra een pagina het resultaat nodig heeft, bijvoorbeeld voor een boodschappenlijst met meerdere omrekeningen. Het event zou ruwe waarden bevatten (`grams: 180`, niet `"180 g"`) en alleen afgaan als het resultaat geldig en veranderd is.
+- **Oventemperatuur**: °F naar °C, met een correctie voor hetelucht (ongeveer 20 °C lager).
+- **Een tweede taal.** Alle tekst staat nu in één getypeerd bestand, [`src/texts/nl.ts`](src/texts/nl.ts). Voor een tweede taal is meer nodig: een manier om de taal te kiezen, de volgorde van de resultaatzin in de teksten in plaats van in de code, en geen vaste `toLowerCase()` op ingrediëntnamen.
+
+## Licentie
+
+MIT

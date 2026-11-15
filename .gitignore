@@ -24,3 +24,7 @@ $RECYCLE.BIN/
 Thumbs.db
 UserInterfaceState.xcuserstate
 .env
+
+# Vitest browser mode: screenshots saved when a test fails
+.vitest-attachments/
+__screenshots__/

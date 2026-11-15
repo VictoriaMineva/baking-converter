@@ -1,0 +1,22 @@
+body {
+  font-family: 'Nunito', sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 500;
+  font-style: normal;
+  margin: 0;
+}
+
+main {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+h1 {
+  font-family: 'Pacifico', cursive;
+  font-size: min(2.2rem, 13vw);
+  font-weight: normal;
+  margin-top: 0;
+  margin-bottom: 0;
+  color: #164e63;
+}

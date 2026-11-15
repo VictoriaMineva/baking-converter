@@ -5,64 +5,61 @@
  * It contains typing information for all components that exist in this project.
  */
 import { HTMLStencilElement, JSXBase } from "@stencil/core/internal";
+import { IngredientId, Unit } from "./data/ingredients";
+export { IngredientId, Unit } from "./data/ingredients";
 export namespace Components {
-    interface MyComponent {
+    interface BakingConverter {
         /**
-          * The first name
+          * The ingredient that is selected when the component loads, e.g. `"butter"`. Only read once: changing it after the component has loaded has no effect.
+          * @default 'flour'
          */
-        "first": string;
+        "defaultIngredient": IngredientId;
         /**
-          * The last name
+          * The unit that is selected when the component loads, e.g. `"stick"`. Only read once: changing it after the component has loaded has no effect.
+          * @default 'cup'
          */
-        "last": string;
-        /**
-          * The middle name
-         */
-        "middle": string;
+        "defaultUnit": Unit;
     }
 }
 declare global {
-    interface HTMLMyComponentElement extends Components.MyComponent, HTMLStencilElement {
+    interface HTMLBakingConverterElement extends Components.BakingConverter, HTMLStencilElement {
     }
-    var HTMLMyComponentElement: {
-        prototype: HTMLMyComponentElement;
-        new (): HTMLMyComponentElement;
+    var HTMLBakingConverterElement: {
+        prototype: HTMLBakingConverterElement;
+        new (): HTMLBakingConverterElement;
     };
     interface HTMLElementTagNameMap {
-        "my-component": HTMLMyComponentElement;
+        "baking-converter": HTMLBakingConverterElement;
     }
 }
 declare namespace LocalJSX {
-    interface MyComponent {
+    interface BakingConverter {
         /**
-          * The first name
+          * The ingredient that is selected when the component loads, e.g. `"butter"`. Only read once: changing it after the component has loaded has no effect.
+          * @default 'flour'
          */
-        "first"?: string;
+        "defaultIngredient"?: IngredientId;
         /**
-          * The last name
+          * The unit that is selected when the component loads, e.g. `"stick"`. Only read once: changing it after the component has loaded has no effect.
+          * @default 'cup'
          */
-        "last"?: string;
-        /**
-          * The middle name
-         */
-        "middle"?: string;
+        "defaultUnit"?: Unit;
     }
 
-    interface MyComponentAttributes {
-        "first": string;
-        "middle": string;
-        "last": string;
+    interface BakingConverterAttributes {
+        "defaultIngredient": IngredientId;
+        "defaultUnit": Unit;
     }
 
     interface IntrinsicElements {
-        "my-component": Omit<MyComponent, keyof MyComponentAttributes> & { [K in keyof MyComponent & keyof MyComponentAttributes]?: MyComponent[K] } & { [K in keyof MyComponent & keyof MyComponentAttributes as `attr:${K}`]?: MyComponentAttributes[K] } & { [K in keyof MyComponent & keyof MyComponentAttributes as `prop:${K}`]?: MyComponent[K] };
+        "baking-converter": Omit<BakingConverter, keyof BakingConverterAttributes> & { [K in keyof BakingConverter & keyof BakingConverterAttributes]?: BakingConverter[K] } & { [K in keyof BakingConverter & keyof BakingConverterAttributes as `attr:${K}`]?: BakingConverterAttributes[K] } & { [K in keyof BakingConverter & keyof BakingConverterAttributes as `prop:${K}`]?: BakingConverter[K] };
     }
 }
 export { LocalJSX as JSX };
 declare module "@stencil/core" {
     export namespace JSX {
         interface IntrinsicElements {
-            "my-component": LocalJSX.IntrinsicElements["my-component"] & JSXBase.HTMLAttributes<HTMLMyComponentElement>;
+            "baking-converter": LocalJSX.IntrinsicElements["baking-converter"] & JSXBase.HTMLAttributes<HTMLBakingConverterElement>;
         }
     }
 }
