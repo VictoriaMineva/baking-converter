@@ -17,9 +17,10 @@
 
 | Name                | Description                                                                  |
 | ------------------- | ---------------------------------------------------------------------------- |
-| `--bc-accent`       | Focus outline, result text and result border. Default `#164e63`.             |
+| `--bc-accent`       | Result text and result border. Default `#164e63`.                            |
 | `--bc-border-color` | Border of the form fields and the line below the form. Default `#767676`.    |
 | `--bc-error`        | Error message, and the border of an invalid amount field. Default `#c2410c`. |
+| `--bc-focus-color`  | Focus outline of the form fields. Default: the value of `--bc-accent`.       |
 | `--bc-hint-color`   | Hint text below the amount field. Default `#595959`.                         |
 | `--bc-input-bg`     | Background of the form fields. Default `#fff`.                               |
 | `--bc-result-bg`    | Background of the result box. Default `#f3fbfc`.                             |

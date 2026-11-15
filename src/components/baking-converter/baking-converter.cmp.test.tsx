@@ -433,6 +433,41 @@ describe('baking-converter', () => {
       },
     );
 
+    it('keeps its width inside a flex row, which sizes items to their content', async () => {
+      const { root, unmount } = await render(
+        <div style={{ display: 'flex' }}>
+          <baking-converter />
+        </div>,
+      );
+      mounted.push(unmount);
+
+      /** 20rem, the smallest width the layout supports. */
+      expect(root.querySelector('baking-converter')!.clientWidth).toBe(320);
+    });
+
+    it('uses --bc-focus-color for the focus outline, and --bc-accent for the result', async () => {
+      const { amount, output } = await setup(
+        <baking-converter
+          style={{ '--bc-accent': 'rgb(1, 2, 3)', '--bc-focus-color': 'rgb(4, 5, 6)' }}
+        />,
+      );
+
+      amount.focus();
+
+      expect(getComputedStyle(amount).outlineColor).toBe('rgb(4, 5, 6)');
+      expect(getComputedStyle(output).color).toBe('rgb(1, 2, 3)');
+    });
+
+    it('falls back to --bc-accent for the focus outline', async () => {
+      const { amount } = await setup(
+        <baking-converter style={{ '--bc-accent': 'rgb(1, 2, 3)' }} />,
+      );
+
+      amount.focus();
+
+      expect(getComputedStyle(amount).outlineColor).toBe('rgb(1, 2, 3)');
+    });
+
     it('colours the dropdown arrows and field backgrounds from the tokens', async () => {
       const { ingredient, amount, unit } = await setup(
         <baking-converter

@@ -1,5 +1,6 @@
 /**
- * @prop --bc-accent: Focus outline, result text and result border. Default `#164e63`.
+ * @prop --bc-accent: Result text and result border. Default `#164e63`.
+ * @prop --bc-focus-color: Focus outline of the form fields. Default: the value of `--bc-accent`.
  * @prop --bc-result-bg: Background of the result box. Default `#f3fbfc`.
  * @prop --bc-error: Error message, and the border of an invalid amount field. Default `#c2410c`.
  * @prop --bc-input-bg: Background of the form fields. Default `#fff`.
@@ -10,9 +11,12 @@
 :host {
   display: block;
   container-type: inline-size;
+  /** Width to use when a layout sizes the component to its content, e.g. in a flex row. Without it, that width is 0. */
+  contain-intrinsic-inline-size: 20rem;
 
   /** The public --bc-* tokens are only read here. The rest of the file uses the --_* aliases. */
   --_accent: var(--bc-accent, #164e63);
+  --_focus-color: var(--bc-focus-color, var(--_accent));
   --_result-bg: var(--bc-result-bg, #f3fbfc);
   --_error: var(--bc-error, #c2410c);
   --_input-bg: var(--bc-input-bg, #fff);
@@ -95,8 +99,8 @@ select {
 
 select:focus-visible,
 input:focus-visible {
-  border-color: var(--_accent);
-  outline: 2px solid var(--_accent);
+  border-color: var(--_focus-color);
+  outline: 2px solid var(--_focus-color);
   outline-offset: 2px;
 }
 
