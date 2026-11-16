@@ -158,7 +158,7 @@ export class BakingConverter {
           <fieldset>
             <legend class="visually-hidden">{TEXT.legend}</legend>
             <label htmlFor="ingredient">{TEXT.labels.ingredient}</label>
-            <div class="select">
+            <div class="select-wrapper">
               <select id="ingredient" onChange={this.onIngredientChange}>
                 {INGREDIENTS.map(item => (
                   <option
@@ -172,7 +172,7 @@ export class BakingConverter {
               </select>
             </div>
 
-            <div class="fields">
+            <div class="field-group">
               <div class="field">
                 <label htmlFor="amount">{TEXT.labels.amount}</label>
                 <input
@@ -190,7 +190,7 @@ export class BakingConverter {
                 <p id="amount-hint" class="hint">
                   {TEXT.amountHint}
                 </p>
-                <p id="amount-error" class="conversion-error" aria-live="polite">
+                <p id="amount-error" class="error" aria-live="polite">
                   {showError &&
                     !result.valid && [
                       <span class="visually-hidden">{TEXT.errorPrefix}</span>,
@@ -200,7 +200,7 @@ export class BakingConverter {
               </div>
               <div class="field">
                 <label htmlFor="unit">{TEXT.labels.unit}</label>
-                <div class="select">
+                <div class="select-wrapper">
                   <select id="unit" onChange={this.onUnitChange}>
                     {ingredient?.units.map(unit => (
                       <option value={unit} selected={unit === this.selectedUnit} key={unit}>

@@ -62,12 +62,12 @@ select {
   padding-right: 2.25rem; /** room for the arrow */
 }
 
-.select {
+.select-wrapper {
   position: relative;
 }
 
 /** The arrow is a mask filled with the text colour, so it follows --bc-text-color. */
-.select::after {
+.select-wrapper::after {
   content: '';
   position: absolute;
   top: 50%;
@@ -81,7 +81,7 @@ select {
   pointer-events: none;
 }
 
-.select:has(select:open)::after {
+.select-wrapper:has(select:open)::after {
   rotate: 180deg;
 }
 
@@ -92,7 +92,7 @@ select {
     padding-right: 0.75rem;
   }
 
-  .select::after {
+  .select-wrapper::after {
     display: none;
   }
 }
@@ -117,7 +117,7 @@ input[aria-invalid='true']:focus-visible {
   outline-offset: 2px;
 }
 
-.fields {
+.field-group {
   display: grid;
   grid-template-columns: 2fr 1fr;
   gap: 1rem;
@@ -154,7 +154,7 @@ input[aria-invalid='true']:focus-visible {
   font-size: 0.9rem;
 }
 
-.conversion-error {
+.error {
   color: var(--_error);
   padding: 0;
   margin: 0.5rem 0 0;
@@ -174,7 +174,7 @@ input[aria-invalid='true']:focus-visible {
 }
 
 @container (max-width: 600px) {
-  .fields {
+  .field-group {
     grid-template-columns: 1fr 1fr;
   }
 
@@ -185,7 +185,7 @@ input[aria-invalid='true']:focus-visible {
 
 /** Below this, two columns cut off the longest unit names, such as "fluid ounce (fl oz)". */
 @container (max-width: 30rem) {
-  .fields {
+  .field-group {
     grid-template-columns: 1fr;
   }
 }
